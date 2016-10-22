@@ -23,6 +23,6 @@ resource "tls_locally_signed_cert" "client" {
 
   allowed_uses = [
     "digital_signature",
-    "key_agreement"
+    "client_auth"
   ]
 }

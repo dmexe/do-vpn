@@ -24,7 +24,6 @@ resource "tls_locally_signed_cert" "server" {
   allowed_uses = [
     "key_encipherment",
     "digital_signature",
-    "key_agreement",
     "server_auth"
   ]
 }

@@ -23,6 +23,7 @@ keepalive 10 60
 dev-type tun
 dev tun
 cipher AES-256-CBC
+remote-cert-tls server
 <ca>
 ${ca_crt}
 </ca>
