@@ -5,10 +5,10 @@ tf_path=$1
 tf_state=$2
 
 ip=$(${tf_path}         output -state=${tf_state} do_droplet)
+ta_key=$(ssh -q -i secrets/user.key root@${ip} cat /etc/openvpn/ta.key)
 ca_crt=$(${tf_path}     output -state=${tf_state} openvpn_ca_pem)
 client_crt=$(${tf_path} output -state=${tf_state} openvpn_client_pem)
 client_key=$(${tf_path} output -state=${tf_state} openvpn_client_key)
-ta_key=$(cat secrets/openvpn-ta.key)
 
 dest="secrets/${ip}.ovpn"
 

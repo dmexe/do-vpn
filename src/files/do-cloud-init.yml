@@ -45,11 +45,6 @@ write_files:
     content: ${openvpn_conf}
     permissions: "0600"
 
-  - path: /etc/openvpn/ta.key
-    encoding: b64
-    content: ${openvpn_ta_key}
-    permissions: "0600"
-
   - path: /etc/openvpn/ca.pem
     encoding: b64
     content: ${openvpn_ca_pem}
@@ -81,6 +76,21 @@ write_files:
       if [ ! -f /etc/openvpn/dh2048.pem ] ; then
         openssl dhparam -out /etc/openvpn/dh2048.pem 2048
         chown openvpn:openvpn /etc/openvpn/dh2048.pem
+        chmod 0600 /etc/openvpn/dh2048.pem
+      fi
+
+  - path: /etc/openvpn/exec-gen-ta.sh
+    permissions: "0755"
+    content: |
+      #!/bin/bash
+      set -ex
+      if [ ! -f /etc/openvpn/ta.key ] ; then
+        docker run --rm \
+          -v /etc/openvpn:/etc/openvpn \
+          kylemanna/openvpn \
+          /usr/sbin/openvpn --genkey --secret /etc/openvpn/ta.key
+        chown openvpn:openvpn /etc/openvpn/ta.key
+        chmod 0600 /etc/openvpn/ta.key
       fi
 
   - path: /etc/openvpn/exec-sysctl.sh
@@ -103,6 +113,7 @@ write_files:
       Restart=always
       RestartSec=10
       TimeoutStartSec=5m
+      ExecStartPre=/etc/openvpn/exec-gen-ta.sh
       ExecStartPre=/etc/openvpn/exec-gen-dh.sh
       ExecStartPre=/etc/openvpn/exec-fw.sh
       ExecStartPre=/etc/openvpn/exec-sysctl.sh

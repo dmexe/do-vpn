@@ -4,3 +4,4 @@ secrets/*.ovpn
 .tfplan.bin
 .DS_Store
 .git-crypt.key
+.terraform

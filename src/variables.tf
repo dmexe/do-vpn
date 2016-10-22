@@ -1,4 +1,4 @@
-variable "openvpn_ta_file"       { default = "./secrets/openvpn-ta.key" }
+variable "aws_region"            { default = "eu-central-1" }
 variable "openvpn_conf_file"     { default = "./secrets/openvpn.conf" }
 variable "openvpn_ip_addr"       { default = "172.19.93.1" }
 variable "openvpn_ip_mask"       { default = "255.255.255.0" }
@@ -29,4 +29,8 @@ output "openvpn_client_pem" {
 
 output "openvpn_client_key" {
   value = "${tls_private_key.client.private_key_pem}"
+}
+
+provider "aws" {
+  region = "eu-central-1"
 }
